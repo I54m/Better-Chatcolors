@@ -19,15 +19,16 @@ public class ChatColorGUI {
     private static final WorkerManager WORKER_MANAGER = WorkerManager.getINSTANCE();
     private static final PlayerDataManager PLAYER_DATA_MANAGER = PlayerDataManager.getINSTANCE();
 
-    private static final IconMenu GUI = new IconMenu(ChatColor.LIGHT_PURPLE + "Chat Color Selection", 4, (clicker, menu, slot, item) -> {
-        String color = PLUGIN.getConfig().getString("GUI." + slot + ".color", "WHITE");
-        PLAYER_DATA_MANAGER.setPlayerData(clicker.getUniqueId(), color);
-        clicker.playSound(clicker.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1, 1);
-        clicker.sendMessage(ChatColor.GREEN + "Successfully set your chat color to: " + item.getItemMeta().getDisplayName());
-        return true;
-    });
+    private static IconMenu GUI;
 
     public static void preLoadGUI() {
+        GUI = new IconMenu(ChatColor.LIGHT_PURPLE + "Chat Color Selection", 4, (clicker, menu, slot, item) -> {
+            String color = PLUGIN.getConfig().getString("GUI." + slot + ".color", "WHITE");
+            PLAYER_DATA_MANAGER.setPlayerData(clicker.getUniqueId(), color);
+            clicker.playSound(clicker.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1, 1);
+            clicker.sendMessage(ChatColor.GREEN + "Successfully set your chat color to: " + item.getItemMeta().getDisplayName());
+            return true;
+        });
         FileConfiguration config = PLUGIN.getConfig();
         for (String key : config.getConfigurationSection("GUI").getKeys(false)) {
             try {
