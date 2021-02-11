@@ -1,0 +1,89 @@
+name: Better-ChatColors
+version: ${project.version}
+main: com.i54m.betterchatcolors.BetterChatColors
+api-version: 1.16
+authors: [ I54m ]
+description: An Advanced Chatcolor plugin
+website: https://i54m.com
+softdepend:
+  - PlaceholderAPI
+  - MVdWPlaceholderAPI
+
+commands:
+  chatcolor:
+    description: Main plugin command.
+    aliases:
+      - colorchat
+      - chatcolour
+      - colourchat
+  bold:
+    description: Allows the player to send a chat message in bold text.
+    aliases:
+      - b
+      - boldchat
+      - chatbold
+
+permissions:
+  betterchatcolors.bold:
+    default: op
+    description: Allows players to use /bold.
+  betterchatcolors.cooldown.bypass:
+    default: op
+    description: Allows players to bypass any cooldowns on /bold.
+    children:
+    - betterchatcolors.bold
+  betterchatcolors.aqua:
+    default: op
+    description: Allows the player to set their chat color to aqua
+  betterchatcolors.black:
+    default: op
+    description: Allows the player to set their chat color to black
+  betterchatcolors.blue:
+    default: op
+    description: Allows the player to set their chat color to blue
+  betterchatcolors.dark_aqua:
+    default: op
+    description: Allows the player to set their chat color to dark aqua
+  betterchatcolors.dark_blue:
+    default: op
+    description: Allows the player to set their chat color to dark blue
+  betterchatcolors.dark_gray:
+    default: op
+    description: Allows the player to set their chat color to dark gray
+  betterchatcolors.dark_green:
+    default: op
+    description: Allows the player to set their chat color to dark green
+  betterchatcolors.dark_purple:
+    default: op
+    description: Allows the player to set their chat color to dark purple
+  betterchatcolors.dark_red:
+    default: op
+    description: Allows the player to set their chat color to dark red
+  betterchatcolors.gold:
+    default: op
+    description: Allows the player to set their chat color to gold
+  betterchatcolors.gray:
+    default: op
+    description: Allows the player to set their chat color to gray
+  betterchatcolors.green:
+    default: op
+    description: Allows the player to set their chat color to green
+  betterchatcolors.light_purple:
+    default: op
+    description: Allows the player to set their chat color to light purple
+  betterchatcolors.red:
+    default: op
+    description: Allows the player to set their chat color to red
+  betterchatcolors.white:
+    default: op
+    description: Allows the player to set their chat color to white
+  betterchatcolors.yellow:
+    default: op
+    description: Allows the player to set their chat color to yellow
+  betterchatcolors.hex:
+    default: op
+    description: Allows the player to set their chat color using hex codes
+  betterchatcolors.gui:
+    default: op
+    description: Allows the player to open and use the gui
+

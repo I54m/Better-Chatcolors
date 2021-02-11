@@ -1,0 +1,188 @@
+#MYSql settings
+MySQL:
+  #host use 127.0.0.1 or localhost for localhost
+  host: localhost
+  #name of the database you want the plugin to use (will create it if it doesn't exist)
+  database: betterchatcolors
+  #username and password you want to plugin to use to access the MYSql database
+  username: plugins
+  password: plugins
+  #the port must be an integer, default is 3306
+  port: 3306
+  #Extra arguments to use in the sql url
+  extraArguments: ?useSSL=false
+  #should extra debug messages be shown for the sql connection?
+  debugMode: false
+
+#the cooldown for the /bold command in minutes
+BOLD-cooldowns:
+  #the permissions are like so betterchatcolors.cooldown.<permission defined here>
+  #in order to bypass these cooldowns you will need the permission betterchatcolors.cooldown.bypass
+  permission1: 60
+
+GUI:
+  4:
+    item: WHITE_DYE
+    name: '&fWhite'
+    amount: 1
+    lore:
+      - '&fThis will set your chat color to: White'
+    noPermToUse: '&4Locked!'
+    permToUse: '&aClick To Select'
+    selected: '&eCurrently Selected!'
+    color: WHITE
+  10:
+    item: YELLOW_DYE
+    name: '&eYellow'
+    amount: 1
+    lore:
+      - '&fThis will set your chat color to: &eYellow'
+    noPermToUse: '&4Locked!'
+    permToUse: '&aClick To Select'
+    selected: '&eCurrently Selected!' 
+    color: YELLOW
+  11:
+    item: MAGENTA_DYE
+    name: '&dLight Purple'
+    amount: 1
+    lore:
+      - '&fThis will set your chat color to: &dLight Purple'
+    noPermToUse: '&4Locked!'
+    permToUse: '&aClick To Select'
+    selected: '&eCurrently Selected!' 
+    color: LIGHT_PURPLE
+  12:
+    item: LIGHT_BLUE_DYE
+    name: '&9Light Blue'
+    amount: 1
+    lore:
+      - '&fThis will set your chat color to: &9Light Blue'
+    noPermToUse: '&4Locked!'
+    permToUse: '&aClick To Select'
+    selected: '&eCurrently Selected!' 
+    color: BLUE
+  13:
+    item: LIME_DYE
+    name: '&aLight Green'
+    amount: 1
+    lore:
+      - '&fThis will set your chat color to: &aLight Green'
+    noPermToUse: '&4Locked!'
+    permToUse: '&aClick To Select'
+    selected: '&eCurrently Selected!' 
+    color: GREEN
+  14:
+    item: RED_DYE
+    name: '&cLight Red'
+    amount: 1
+    lore:
+      - '&fThis will set your chat color to: &cLight Red'
+    noPermToUse: '&4Locked!'
+    permToUse: '&aClick To Select'
+    selected: '&eCurrently Selected!' 
+    color: RED
+  15:
+    item: DIAMOND
+    name: '&bLight Aqua'
+    amount: 1
+    lore:
+      - '&fThis will set your chat color to: &bLight Aqua'
+    noPermToUse: '&4Locked!'
+    permToUse: '&aClick To Select'
+    selected: '&eCurrently Selected!'
+    color: 'AQUA'
+  16:
+    item: LIGHT_GRAY_DYE
+    name: '&7Light Gray'
+    amount: 1
+    lore:
+      - '&fThis will set your chat color to: &7Light Gray'
+    noPermToUse: '&4Locked!'
+    permToUse: '&aClick To Select'
+    selected: '&eCurrently Selected!' 
+    color: GRAY
+  19:
+    item: ORANGE_DYE
+    name: '&6Gold'
+    amount: 1
+    lore:
+      - '&fThis will set your chat color to: &6Gold'
+    noPermToUse: '&4Locked!'
+    permToUse: '&aClick To Select'
+    selected: '&eCurrently Selected!' 
+    color: GOLD
+  20:
+    item: PURPLE_DYE
+    name: '&5Dark Purple'
+    amount: 1
+    lore:
+      - '&fThis will set your chat color to: &5Dark Purple'
+    noPermToUse: '&4Locked!'
+    permToUse: '&aClick To Select'
+    selected: '&eCurrently Selected!' 
+    color: DARK_PURPLE
+  21:
+    item: BLUE_DYE
+    name: '&1Dark Blue'
+    amount: 1
+    lore:
+      - '&fThis will set your chat color to: &1Dark Blue'
+    noPermToUse: '&4Locked!'
+    permToUse: '&aClick To Select'
+    selected: '&eCurrently Selected!' 
+    color: DARK_BLUE
+  22:
+    item: GREEN_DYE
+    name: '&2Dark Green'
+    amount: 1
+    lore:
+      - '&fThis will set your chat color to: &2Dark Green'
+    noPermToUse: '&4Locked!'
+    permToUse: '&aClick To Select'
+    selected: '&eCurrently Selected!' 
+    color: DARK_GREEN
+  23:
+    item: REDSTONE
+    name: '&4Dark Red'
+    amount: 1
+    lore:
+      - '&fThis will set your chat color to: &4Dark Red'
+    noPermToUse: '&4Locked!'
+    permToUse: '&aClick To Select'
+    selected: '&eCurrently Selected!' 
+    color: DARK_RED
+  24:
+    item: CYAN_DYE
+    name: '&3Dark Aqua'
+    amount: 1
+    lore:
+      - '&fThis will set your chat color to: &3Dark Aqua'
+    noPermToUse: '&4Locked!'
+    permToUse: '&aClick To Select'
+    selected: '&eCurrently Selected!'
+    color: DARK_AQUA
+  25:
+    item: GRAY_DYE
+    name: '&8Dark Gray'
+    amount: 1
+    lore:
+      - '&fThis will set your chat color to: &8Dark Gray'
+    noPermToUse: '&4Locked!'
+    permToUse: '&aClick To Select'
+    selected: '&eCurrently Selected!' 
+    color: DARK_GRAY
+  31:
+    item: BLACK_DYE
+    name: '&0Black'
+    amount: 1
+    lore:
+      - '&fThis will set your chat color to: &0Black'
+    noPermToUse: '&4Locked!'
+    permToUse: '&aClick To Select'
+    selected: '&eCurrently Selected!'
+    color: BLACK
+  FILL:
+    item: MAGENTA_STAINED_GLASS_PANE
+
+
+
