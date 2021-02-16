@@ -79,6 +79,15 @@ public class PlayerDataManager implements Listener, Manager {
             return;
         }
         PLUGIN.getServer().getScheduler().cancelTask(cacheTaskid);
+        try {
+            if (connection != null && !connection.isClosed() || hikari.isRunning()) {
+                hikari.close();
+                connection.close();
+                connection = null;
+            }
+        } catch (Exception e) {
+            PLUGIN.getLogger().severe("Error occurred while closing mysql connection. Error Message: " + e.getMessage());
+        }
         locked = true;
     }
 
@@ -181,6 +190,17 @@ public class PlayerDataManager implements Listener, Manager {
             return;
         }
         try {
+            try {
+                if (connection == null || connection.isClosed() || hikari.isClosed()) {
+                    hikari.close();
+                    connection.close();
+                    connection = null;
+                    setupStorage();
+                    return;
+                }
+            } catch (Exception e) {
+                PLUGIN.getLogger().severe("Error occurred while closing mysql connection. Error Message: " + e.getMessage());
+            }
             for (Player player : PLUGIN.getServer().getOnlinePlayers()) {
                 loadPlayerData(player.getUniqueId(), false);
                 loadBoldData(player.getUniqueId());
