@@ -61,7 +61,7 @@ public class WorkerManager implements Manager {
             return;
         }
         workers.add(worker);
-        worker.setName("The-Punisher - Worker Thread #" + (workers.indexOf(worker) + 1));
+        worker.setName("Better-ChatColors - Worker Thread #" + (workers.indexOf(worker) + 1));
         worker.start();
     }
 
