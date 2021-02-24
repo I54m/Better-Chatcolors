@@ -191,20 +191,33 @@ public class PlayerDataManager implements Listener, Manager {
         }
         try {
             try {
-                if (connection == null || connection.isClosed() || hikari.isClosed()) {
+                if (connection != null &&
+                        connection.isClosed() &&
+                        hikari.isClosed()) {
                     hikari.close();
                     connection.close();
                     connection = null;
                     setupStorage();
                     return;
+                } else if (connection == null) {
+                    hikari.close();
+                    setupStorage();
+                    return;
                 }
             } catch (Exception e) {
                 PLUGIN.getLogger().severe("Error occurred while closing mysql connection. Error Message: " + e.getMessage());
+                PLUGIN.getLogger().severe("Unable to cache data. Error Message: " + e.getMessage());
+                return;
+            }
+            if (PLUGIN.getServer().getOnlinePlayers().size() <=0) { // if no players online it will not ping the database and connection will die so we make sure connection is still valid
+                connection.isValid(15);
+                return;
             }
             for (Player player : PLUGIN.getServer().getOnlinePlayers()) {
                 loadPlayerData(player.getUniqueId(), false);
                 loadBoldData(player.getUniqueId());
             }
+
         } catch (Exception e) {
             PLUGIN.getLogger().severe("Unable to cache ChatColor data. Error Message: " + e.getMessage());
         }
