@@ -6,7 +6,7 @@
 
     <groupId>better-chatcolors</groupId>
     <artifactId>com.i54m.betterchatcolors</artifactId>
-    <version>1.1</version>
+    <version>1.2</version>
     <packaging>jar</packaging>
 
     <name>Better-ChatColors</name>
