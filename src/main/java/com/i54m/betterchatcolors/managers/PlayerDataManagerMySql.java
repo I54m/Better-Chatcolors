@@ -2,7 +2,6 @@ package com.i54m.betterchatcolors.managers;
 
 
 import com.i54m.betterchatcolors.util.NameFetcher;
-import com.i54m.betterchatcolors.util.StorageType;
 import com.i54m.betterchatcolors.util.UUIDFetcher;
 import com.zaxxer.hikari.HikariDataSource;
 import lombok.Getter;
@@ -16,7 +15,6 @@ import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.File;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -27,10 +25,10 @@ import java.util.UUID;
 
 
 @NoArgsConstructor
-public class PlayerDataManager implements Listener, Manager {
+public class PlayerDataManagerMySql implements Listener, Manager {
 
     @Getter
-    private static final PlayerDataManager INSTANCE = new PlayerDataManager();
+    private static final PlayerDataManagerMySql INSTANCE = new PlayerDataManagerMySql();
     private final WorkerManager WORKER_MANAGER = WorkerManager.getINSTANCE();
     private final Map<UUID, String> playerDataCache = new HashMap<>();
     private final Map<UUID, Long> boldDataCache = new HashMap<>();
@@ -116,35 +114,11 @@ public class PlayerDataManager implements Listener, Manager {
         password = PLUGIN.getConfig().getString("MySQL.password", "plugins");
         port = PLUGIN.getConfig().getInt("MySQL.port", 3306);
         extraArguments = PLUGIN.getConfig().getString("MySQL.extraArguments", "?useSSL=false");
-        StorageType storageType;
-        try {
-            storageType = StorageType.valueOf(PLUGIN.getConfig().getString("Storage-Type").toUpperCase());
-        } catch (Exception e) {
-            PLUGIN.getLogger().severe("Unable to start Player Data Manager!!");
-            PLUGIN.getLogger().severe("Unrecognized storage type: " + PLUGIN.getConfig().getString("Storage-Type").toUpperCase());
-            PLUGIN.getLogger().severe("Storage-Type must be either MYSQL or SQLITE!!");
-            PLUGIN.onDisable();
-            return;
-        }
-        switch (storageType) {
-            case MYSQL: {
-                hikari.addDataSourceProperty("serverName", host);
-                hikari.addDataSourceProperty("port", port);
-                hikari.setPassword(password);
-                hikari.setUsername(username);
-                hikari.setJdbcUrl("jdbc:mysql://" + this.host + ":" + this.port + "/" + this.extraArguments);
-                break;
-            }
-            default:
-            case SQLITE: {
-                File databaseFile = new File(PLUGIN.getDataFolder(), database + ".db");
-                if (!databaseFile.exists())
-                    databaseFile.createNewFile();
-                hikari.setDriverClassName("org.sqlite.JDBC");
-                hikari.setJdbcUrl("jdbc:sqlite:" + databaseFile);
-                hikari.setConnectionTestQuery("SELECT 1");
-            }
-        }
+        hikari.addDataSourceProperty("serverName", host);
+        hikari.addDataSourceProperty("port", port);
+        hikari.setPassword(password);
+        hikari.setUsername(username);
+        hikari.setJdbcUrl("jdbc:mysql://" + this.host + ":" + this.port + "/" + this.extraArguments);
         hikari.setPoolName("Better-ChatColors");
         hikari.setMaxLifetime(60000);
         hikari.setIdleTimeout(45000);
