@@ -135,6 +135,7 @@ public class PlayerDataManager implements Listener, Manager {
                 hikari.setJdbcUrl("jdbc:mysql://" + this.host + ":" + this.port + "/" + this.extraArguments);
                 break;
             }
+            default:
             case SQLITE: {
                 File databaseFile = new File(PLUGIN.getDataFolder(), database + ".db");
                 if (!databaseFile.exists())
