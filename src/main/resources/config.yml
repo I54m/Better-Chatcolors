@@ -1,5 +1,5 @@
 #Storage Type either MYSQL or SQLITE
-storage-type: SQLITE
+Storage-Type: SQLITE
 
 #MYSql settings
 MySQL:
