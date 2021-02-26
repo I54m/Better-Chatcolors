@@ -1,7 +1,7 @@
 name: Better-ChatColors
 version: ${project.version}
 main: com.i54m.betterchatcolors.BetterChatColors
-api-version: 1.16
+api-version: 1.13
 authors: [ I54m ]
 description: An Advanced Chatcolor plugin
 website: https://i54m.com

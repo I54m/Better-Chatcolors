@@ -33,34 +33,70 @@ public final class BetterChatColors extends JavaPlugin {
     public final TreeMap<Long, String> boldCooldowns = new TreeMap<>();
     @Getter
     public final ArrayList<UUID> boldPlayers = new ArrayList<>();
+    @Getter
+    public boolean preHex;
 
     @Override
     public void onEnable() {
         setInstance(this);
+        if (getServer().getVersion().contains("1.8") ||
+                getServer().getVersion().contains("1.9") ||
+                getServer().getVersion().contains("1.10") ||
+                getServer().getVersion().contains("1.11") ||
+                getServer().getVersion().contains("1.12")) {
+            getLogger().severe("This plugin does not support pre 1.13 minecraft versions at the moment!");
+            getLogger().severe("Please consider updating to minecraft 1.13!");
+            getLogger().severe("This plugin may support 1.8+ in the future though!");
+            return;
+        } else if (getServer().getVersion().contains("1.13") ||
+                getServer().getVersion().contains("1.14") ||
+                getServer().getVersion().contains("1.15")) {
+            preHex = true;
+            getLogger().warning("This version of minecraft does not support hex color codes, this feature will be disabled!");
+        } else {
+            preHex = false;
+        }
         if (!(new File(getDataFolder(), "config.yml").exists()))
             saveDefaultConfig();
         if (getServer().getPluginManager().isPluginEnabled("MVdWPlaceholderAPI"))
-            PlaceholderAPI.registerPlaceholder(this, "betterchatcolors_color", (event) -> {
-                if (event.isOnline() && event.getPlayer() != null) {
-                    String color = PLAYERDATA_MANAGER.getPlayerData(event.getPlayer().getUniqueId(), true);
-                    if (color.startsWith("&"))
-                        if (boldPlayers.contains(event.getPlayer().getUniqueId())) {
-                            boldPlayers.remove(event.getPlayer().getUniqueId());
-                            return ChatColor.translateAlternateColorCodes('&', color) + ChatColor.BOLD + "";
-                        } else
-                            return ChatColor.translateAlternateColorCodes('&', color);
-                    else {
-                        if (boldPlayers.contains(event.getPlayer().getUniqueId())) {
-                            boldPlayers.remove(event.getPlayer().getUniqueId());
-                            return ChatColor.of(color) + "" + ChatColor.BOLD + "";
-                        } else
-                            return ChatColor.of(color) + "";
+            if (preHex)
+                PlaceholderAPI.registerPlaceholder(this, "betterchatcolors_color", (event) -> {
+                    if (event.isOnline() && event.getPlayer() != null) {
+                        String color = PLAYERDATA_MANAGER.getPlayerData(event.getPlayer().getUniqueId(), true);
+                        if (color.startsWith("&"))
+                            if (boldPlayers.contains(event.getPlayer().getUniqueId())) {
+                                boldPlayers.remove(event.getPlayer().getUniqueId());
+                                return ChatColor.translateAlternateColorCodes('&', color) + ChatColor.BOLD + "";
+                            } else
+                                return ChatColor.translateAlternateColorCodes('&', color);
                     }
-                }
-                return ChatColor.WHITE + "";
-            });
+                    return ChatColor.WHITE + "";
+                });
+            else
+                PlaceholderAPI.registerPlaceholder(this, "betterchatcolors_color", (event) -> {
+                    if (event.isOnline() && event.getPlayer() != null) {
+                        String color = PLAYERDATA_MANAGER.getPlayerData(event.getPlayer().getUniqueId(), true);
+                        if (color.startsWith("&"))
+                            if (boldPlayers.contains(event.getPlayer().getUniqueId())) {
+                                boldPlayers.remove(event.getPlayer().getUniqueId());
+                                return ChatColor.translateAlternateColorCodes('&', color) + ChatColor.BOLD + "";
+                            } else
+                                return ChatColor.translateAlternateColorCodes('&', color);
+                        else {
+                            if (boldPlayers.contains(event.getPlayer().getUniqueId())) {
+                                boldPlayers.remove(event.getPlayer().getUniqueId());
+                                return ChatColor.of(color) + "" + ChatColor.BOLD + "";
+                            } else
+                                return ChatColor.of(color) + "";
+                        }
+                    }
+                    return ChatColor.WHITE + "";
+                });
         if (getServer().getPluginManager().isPluginEnabled("PlaceholderAPI"))
-            new PapiPlaceholder().register();
+            if (preHex)
+                new PapiPlaceholderPreHex().register();
+            else
+                new PapiPlaceholder().register();
         if (!getServer().getPluginManager().isPluginEnabled("PlaceholderAPI") && !getServer().getPluginManager().isPluginEnabled("MVdWPlaceholderAPI")) {
             getLogger().severe("Unable to find MVdWPlaceholderAPI or PlaceholderAPI!");
             getLogger().severe("This plugin largely relies on one of these two plugins to work and will not function correctly with out them!");

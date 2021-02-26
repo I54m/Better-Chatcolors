@@ -13,20 +13,30 @@ public class ManualCommand implements SubCommand {
         }
         if (args[0].startsWith("#")) {
             if (args[0].length() != 7) {
-                player.sendMessage(ChatColor.RED + "A hex color code must be 7 characters long starting with a #");
-                player.sendMessage(ChatColor.RED + "and must only contain numbers 0-9 and letters a-f!");
-                return;
+                if (PLUGIN.preHex) {
+                    player.sendMessage(ChatColor.RED + "Hex colors are currently not supported on this version!");
+                    return;
+                } else {
+                    player.sendMessage(ChatColor.RED + "A hex color code must be 7 characters long starting with a #");
+                    player.sendMessage(ChatColor.RED + "and must only contain numbers 0-9 and letters a-f!");
+                    return;
+                }
             }
-            try {
-                ChatColor.of(args[0]);
-            } catch (IllegalArgumentException illegalArgumentException) {
-                player.sendMessage(ChatColor.RED + "Unable to parse chatcolor!");
-                player.sendMessage(ChatColor.RED + "A hex color code must be 7 characters long starting with a #");
-                player.sendMessage(ChatColor.RED + "and must only contain numbers 0-9 and letters a-f!");
+            if (PLUGIN.preHex) {
+                player.sendMessage(ChatColor.RED + "Hex colors are currently not supported on this version!");
                 return;
+            } else {
+                try {
+                    ChatColor.of(args[0]);
+                } catch (IllegalArgumentException illegalArgumentException) {
+                    player.sendMessage(ChatColor.RED + "Unable to parse chatcolor!");
+                    player.sendMessage(ChatColor.RED + "A hex color code must be 7 characters long starting with a #");
+                    player.sendMessage(ChatColor.RED + "and must only contain numbers 0-9 and letters a-f!");
+                    return;
+                }
+                PLAYER_DATA_MANAGER.setPlayerData(player.getUniqueId(), args[0]);
+                player.sendMessage(ChatColor.GREEN + "Successfully set your chat color to: " + ChatColor.of(args[0]) + args[0]);
             }
-            PLAYER_DATA_MANAGER.setPlayerData(player.getUniqueId(), args[0]);
-            player.sendMessage(ChatColor.GREEN + "Successfully set your chat color to: " + ChatColor.of(args[0]) + args[0]);
         } else if (args[0].startsWith("&")) {
             if ((args[0].contains("&k") ||
                     args[0].contains("&n") ||
@@ -40,7 +50,10 @@ public class ManualCommand implements SubCommand {
             PLAYER_DATA_MANAGER.setPlayerData(player.getUniqueId(), args[0]);
             player.sendMessage(ChatColor.GREEN + "Successfully set your chat color to: " + ChatColor.translateAlternateColorCodes('&', args[0]) + args[0]);
         } else {
-            player.sendMessage(ChatColor.RED + "Your chat color must start with either '#' for hex codes or '&' for color codes!");
+            if (PLUGIN.preHex)
+                player.sendMessage(ChatColor.RED + "Hex colors are currently not supported on this version!");
+            else
+                player.sendMessage(ChatColor.RED + "Your chat color must start with either '#' for hex codes or '&' for color codes!");
         }
     }
 }

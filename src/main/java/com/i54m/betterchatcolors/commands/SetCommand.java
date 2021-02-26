@@ -26,33 +26,46 @@ public class SetCommand implements SubCommand {
         UUID uuid;
         try {
             uuid = future.get(5, TimeUnit.SECONDS);
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
-            PLUGIN.getLogger().severe("ERROR: Unable to fetch uuid for player: " + args[0] +" within 5 seconds!");
+            PLUGIN.getLogger().severe("ERROR: Unable to fetch uuid for player: " + args[0] + " within 5 seconds!");
             player.sendMessage(ChatColor.RED + "We were unable to fetch that players uuid within the allocated time, please try again later!");
             return;
         }
         if (args[1].startsWith("#")) {
-            if (args[1].length() != 7) {
-                player.sendMessage(ChatColor.RED + "A hex color code must be 7 characters long starting with a #");
-                player.sendMessage(ChatColor.RED + "and must only contain numbers 0-9 and letters a-f!");
-                return;
+            if (args[0].length() != 7) {
+                if (PLUGIN.preHex) {
+                    player.sendMessage(ChatColor.RED + "Hex colors are currently not supported on this version!");
+                    return;
+                } else {
+                    player.sendMessage(ChatColor.RED + "A hex color code must be 7 characters long starting with a #");
+                    player.sendMessage(ChatColor.RED + "and must only contain numbers 0-9 and letters a-f!");
+                    return;
+                }
             }
-            try {
-                ChatColor.of(args[1]);
-            } catch (IllegalArgumentException illegalArgumentException) {
-                player.sendMessage(ChatColor.RED + "Unable to parse chatcolor!");
-                player.sendMessage(ChatColor.RED + "A hex color code must be 7 characters long starting with a #");
-                player.sendMessage(ChatColor.RED + "and must only contain numbers 0-9 and letters a-f!");
+            if (PLUGIN.preHex) {
+                player.sendMessage(ChatColor.RED + "Hex colors are currently not supported on this version!");
                 return;
+            } else {
+                try {
+                    ChatColor.of(args[1]);
+                } catch (IllegalArgumentException illegalArgumentException) {
+                    player.sendMessage(ChatColor.RED + "Unable to parse chatcolor!");
+                    player.sendMessage(ChatColor.RED + "A hex color code must be 7 characters long starting with a #");
+                    player.sendMessage(ChatColor.RED + "and must only contain numbers 0-9 and letters a-f!");
+                    return;
+                }
+                PLAYER_DATA_MANAGER.setPlayerData(uuid, args[1]);
+                player.sendMessage(ChatColor.GREEN + "Successfully set " + args[0] + "'s chat color to: " + ChatColor.of(args[1]) + args[1]);
             }
-            PLAYER_DATA_MANAGER.setPlayerData(uuid, args[1]);
-            player.sendMessage(ChatColor.GREEN + "Successfully set " + args[0] + "'s chat color to: " + ChatColor.of(args[1]) + args[1]);
         } else if (args[1].startsWith("&")) {
             PLAYER_DATA_MANAGER.setPlayerData(uuid, ChatColor.translateAlternateColorCodes('&', args[1]));
             player.sendMessage(ChatColor.GREEN + "Successfully set" + args[0] + "'s chat color to: " + ChatColor.translateAlternateColorCodes('&', args[1]) + args[1]);
         } else {
-            player.sendMessage(ChatColor.RED + "Your chat color must start with either '#' for hex codes or & for color codes!");
+            if (PLUGIN.preHex)
+                player.sendMessage(ChatColor.RED + "Hex colors are currently not supported on this version!");
+            else
+                player.sendMessage(ChatColor.RED + "Your chat color must start with either '#' for hex codes or & for color codes!");
         }
     }
 }

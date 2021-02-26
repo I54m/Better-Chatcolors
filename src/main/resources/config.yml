@@ -1,3 +1,6 @@
+#Storage Type either MYSQL or SQLITE
+storage-type: SQLITE
+
 #MYSql settings
 MySQL:
   #host use 127.0.0.1 or localhost for localhost

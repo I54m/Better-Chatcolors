@@ -2,6 +2,7 @@ package com.i54m.betterchatcolors.managers;
 
 
 import com.i54m.betterchatcolors.util.NameFetcher;
+import com.i54m.betterchatcolors.util.StorageType;
 import com.i54m.betterchatcolors.util.UUIDFetcher;
 import com.zaxxer.hikari.HikariDataSource;
 import lombok.Getter;
@@ -15,6 +16,7 @@ import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.File;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -114,11 +116,34 @@ public class PlayerDataManager implements Listener, Manager {
         password = PLUGIN.getConfig().getString("MySQL.password", "plugins");
         port = PLUGIN.getConfig().getInt("MySQL.port", 3306);
         extraArguments = PLUGIN.getConfig().getString("MySQL.extraArguments", "?useSSL=false");
-        hikari.addDataSourceProperty("serverName", host);
-        hikari.addDataSourceProperty("port", port);
-        hikari.setPassword(password);
-        hikari.setUsername(username);
-        hikari.setJdbcUrl("jdbc:mysql://" + this.host + ":" + this.port + "/" + this.extraArguments);
+        StorageType storageType;
+        try {
+            storageType = StorageType.valueOf(PLUGIN.getConfig().getString("Storage-Type").toUpperCase());
+        } catch (Exception e) {
+            PLUGIN.getLogger().severe("Unable to start Player Data Manager!!");
+            PLUGIN.getLogger().severe("Unrecognized storage type: " + PLUGIN.getConfig().getString("Storage-Type").toUpperCase());
+            PLUGIN.getLogger().severe("Storage-Type must be either MYSQL or SQLITE!!");
+            PLUGIN.onDisable();
+            return;
+        }
+        switch (storageType) {
+            case MYSQL: {
+                hikari.addDataSourceProperty("serverName", host);
+                hikari.addDataSourceProperty("port", port);
+                hikari.setPassword(password);
+                hikari.setUsername(username);
+                hikari.setJdbcUrl("jdbc:mysql://" + this.host + ":" + this.port + "/" + this.extraArguments);
+                break;
+            }
+            case SQLITE: {
+                File databaseFile = new File(PLUGIN.getDataFolder(), database + ".db");
+                if (!databaseFile.exists())
+                    databaseFile.createNewFile();
+                hikari.setDriverClassName("org.sqlite.JDBC");
+                hikari.setJdbcUrl("jdbc:sqlite:" + databaseFile);
+                hikari.setConnectionTestQuery("SELECT 1");
+            }
+        }
         hikari.setPoolName("Better-ChatColors");
         hikari.setMaxLifetime(60000);
         hikari.setIdleTimeout(45000);
