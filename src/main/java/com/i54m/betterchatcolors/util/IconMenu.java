@@ -136,6 +136,14 @@ public class IconMenu implements Listener {
         }
     }
 
+    public void addFill(Material material, short data) {
+        this.fill = getItem(new ItemStack(material, 1, data), " ", " ");
+        for (int i = 0; i < size; i ++) {
+            if (items[i] == null)
+                items[i] = fill;
+        }
+    }
+
     private ItemStack getItem(ItemStack item, String name, String... lore) {
         ItemMeta im = item.getItemMeta();
         im.setDisplayName(name);
