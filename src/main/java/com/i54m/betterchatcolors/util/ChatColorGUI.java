@@ -12,6 +12,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class ChatColorGUI {
 
@@ -37,8 +38,22 @@ public class ChatColorGUI {
                 config.getStringList("GUI." + key + ".lore").forEach((i) -> {
                     lore.add(ChatColor.translateAlternateColorCodes('&', i));
                 });
+                Material material = null;
+                try {
+                    material = Material.valueOf(config.getString("GUI." + key + ".item", "STONE"));
+                } catch (Exception e) {
+                        Optional<XMaterial> xMaterial = XMaterial.matchXMaterial(config.getString("GUI." + key + ".item", "STONE"));
+                        if (xMaterial.isPresent())
+                            material = xMaterial.get().parseMaterial();
+
+                        if (!xMaterial.isPresent() || material == null) {
+                            PLUGIN.getLogger().severe("Error occurred during GUI pre load: " + config.getString("GUI." + key + ".item", "STONE") + " is not a valid Item Name!");
+                            PLUGIN.getLogger().severe("Error Message: " + e.getMessage());
+                            return;
+                        }
+                }
                 GUI.addButton(position,
-                        new ItemStack(Material.valueOf(config.getString("GUI." + key + ".item", "STONE")), config.getInt("GUI." + key + ".amount", 1)),
+                        new ItemStack(material, config.getInt("GUI." + key + ".amount", 1)),
                         ChatColor.translateAlternateColorCodes('&', config.getString("GUI." + key + ".name", "&4Error Couldn't get name from config!!")), lore);
             } catch (NumberFormatException nfe) {
                 if (!key.equalsIgnoreCase("FILL")) {
