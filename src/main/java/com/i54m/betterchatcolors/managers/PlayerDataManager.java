@@ -110,7 +110,6 @@ public class PlayerDataManager implements Listener, Manager {
                 return;
             Class.forName("org.sqlite.JDBC");
             PLUGIN.getDataFolder().mkdirs();
-            System.out.println(PLUGIN.getDataFolder().getPath());
             this.connection = DriverManager.getConnection("jdbc:sqlite:" + PLUGIN.getDataFolder().getPath() + "/" + database + ".db");
         } catch (Exception e) {
             PLUGIN.getLogger().severe(" ");
@@ -212,7 +211,7 @@ public class PlayerDataManager implements Listener, Manager {
                 } catch (Exception e) {
                     PLUGIN.getLogger().severe("Unable to cache ChatColor and Bold cooldown data. Error Message: " + e.getMessage());
                 }
-            }, 200, 100);
+            }, 400, 100);
         }
     }
 
@@ -253,10 +252,10 @@ public class PlayerDataManager implements Listener, Manager {
                     PLUGIN.getLogger().severe("Unable to cache data. Error Message: " + e.getMessage());
                     return;
                 }
-            }
-            if (PLUGIN.getServer().getOnlinePlayers().size() <= 0) { // if no players online it will not ping the database and connection will die so we make sure connection is still valid
-                connection.isValid(15);
-                return;
+                if (PLUGIN.getServer().getOnlinePlayers().size() <= 0) { // if no players online it will not ping the database and connection will die so we make sure connection is still valid
+                    connection.isValid(15);
+                    return;
+                }
             }
             for (Player player : PLUGIN.getServer().getOnlinePlayers()) {
                 loadPlayerData(player.getUniqueId(), false);
