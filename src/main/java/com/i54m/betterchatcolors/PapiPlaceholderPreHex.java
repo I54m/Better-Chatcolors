@@ -1,6 +1,7 @@
 package com.i54m.betterchatcolors;
 
 import com.i54m.betterchatcolors.managers.PlayerDataManager;
+import com.i54m.betterchatcolors.util.HexColorTranslator;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.entity.Player;
@@ -8,6 +9,8 @@ import org.jetbrains.annotations.NotNull;
 
 public class PapiPlaceholderPreHex extends PlaceholderExpansion {
     private BetterChatColors plugin;
+    private final HexColorTranslator HEX_COLOR_TRANSLATOR = HexColorTranslator.getINSTANCE();
+
     public PapiPlaceholderPreHex() {
         plugin = BetterChatColors.getInstance();
     }
@@ -39,6 +42,19 @@ public class PapiPlaceholderPreHex extends PlaceholderExpansion {
                     return ChatColor.translateAlternateColorCodes('&', color) + ChatColor.BOLD + "";
                 } else
                     return ChatColor.translateAlternateColorCodes('&', color);
+            else if (color.startsWith("#")){
+                if (plugin.getBoldPlayers().contains(player.getUniqueId())) {
+                    plugin.getBoldPlayers().remove(player.getUniqueId());
+                    return HEX_COLOR_TRANSLATOR.translate(color) == null ? ChatColor.WHITE + "" + ChatColor.BOLD : HEX_COLOR_TRANSLATOR.translate(color) + "" + ChatColor.BOLD;
+                } else
+                    return HEX_COLOR_TRANSLATOR.translate(color) == null ? ChatColor.WHITE + "" : HEX_COLOR_TRANSLATOR.translate(color) + "";
+            } else {
+                if (plugin.getBoldPlayers().contains(player.getUniqueId())) {
+                    plugin.getBoldPlayers().remove(player.getUniqueId());
+                    return ChatColor.valueOf(color) + "" + ChatColor.BOLD + "";
+                } else
+                    return ChatColor.valueOf(color) + "";
+            }
         }
 
         return null;
