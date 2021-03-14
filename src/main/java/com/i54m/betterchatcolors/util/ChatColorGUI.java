@@ -26,7 +26,10 @@ public class ChatColorGUI {
         GUI = new IconMenu(ChatColor.LIGHT_PURPLE + "Chat Color Selection", 4, (clicker, menu, slot, item) -> {
             String color = PLUGIN.getConfig().getString("GUI." + slot + ".color", "WHITE");
             PLAYER_DATA_MANAGER.setPlayerData(clicker.getUniqueId(), color);
-            clicker.playSound(clicker.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1, 1);
+            if (!PLUGIN.isLegacy())
+                clicker.playSound(clicker.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1, 1);
+            else
+                clicker.playSound(clicker.getLocation(), Sound.valueOf("LEVEL_UP"), 1, 1);
             clicker.sendMessage(ChatColor.GREEN + "Successfully set your chat color to: " + item.getItemMeta().getDisplayName());
             return true;
         });
@@ -39,22 +42,30 @@ public class ChatColorGUI {
                     lore.add(ChatColor.translateAlternateColorCodes('&', i));
                 });
                 Material material = null;
+                short data = 0;
                 try {
                     material = Material.valueOf(config.getString("GUI." + key + ".item", "STONE"));
                 } catch (Exception e) {
-                        Optional<XMaterial> xMaterial = XMaterial.matchXMaterial(config.getString("GUI." + key + ".item", "STONE"));
-                        if (xMaterial.isPresent())
-                            material = xMaterial.get().parseMaterial();
+                    Optional<XMaterial> xMaterial = XMaterial.matchXMaterial(config.getString("GUI." + key + ".item", "STONE"));
+                    if (xMaterial.isPresent()) {
+                        material = xMaterial.get().parseMaterial();
+                        data = xMaterial.get().getData();
+                    }
 
-                        if (!xMaterial.isPresent() || material == null) {
-                            PLUGIN.getLogger().severe("Error occurred during GUI pre load: " + config.getString("GUI." + key + ".item", "STONE") + " is not a valid Item Name!");
-                            PLUGIN.getLogger().severe("Error Message: " + e.getMessage());
-                            return;
-                        }
+                    if (!xMaterial.isPresent() || material == null) {
+                        PLUGIN.getLogger().severe("Error occurred during GUI pre load: " + config.getString("GUI." + key + ".item", "STONE") + " is not a valid material name for item " + key + "!");
+                        PLUGIN.getLogger().severe("Error Message: " + e.getMessage());
+                        return;
+                    }
                 }
-                GUI.addButton(position,
-                        new ItemStack(material, config.getInt("GUI." + key + ".amount", 1)),
-                        ChatColor.translateAlternateColorCodes('&', config.getString("GUI." + key + ".name", "&4Error Couldn't get name from config!!")), lore);
+                if (PLUGIN.isLegacy())
+                    GUI.addButton(position,
+                            new ItemStack(material, config.getInt("GUI." + key + ".amount", 1), data),
+                            ChatColor.translateAlternateColorCodes('&', config.getString("GUI." + key + ".name", "&4Error Couldn't get name from config!!")), lore);
+                else
+                    GUI.addButton(position,
+                            new ItemStack(material, config.getInt("GUI." + key + ".amount", 1)),
+                            ChatColor.translateAlternateColorCodes('&', config.getString("GUI." + key + ".name", "&4Error Couldn't get name from config!!")), lore);
             } catch (NumberFormatException nfe) {
                 if (!key.equalsIgnoreCase("FILL")) {
                     PLUGIN.getLogger().severe("Error occurred during GUI pre load: " + key + " is not a valid number or 'FILL'!");
@@ -63,7 +74,26 @@ public class ChatColorGUI {
                 }
             }
         }
-        GUI.addFill(Material.valueOf(config.getString("GUI.FILL.item", "STONE")));
+        Material material = null;
+        short data = 0;
+        try {
+            material = Material.valueOf(config.getString("GUI.FILL.item", "STONE"));
+        } catch (Exception e) {
+            Optional<XMaterial> xMaterial = XMaterial.matchXMaterial(config.getString("GUI.FILL.item", "STONE"));
+            if (xMaterial.isPresent()) {
+                material = xMaterial.get().parseMaterial();
+                data = xMaterial.get().getData();
+            }
+            if (!xMaterial.isPresent() || material == null) {
+                PLUGIN.getLogger().severe("Error occurred during GUI pre load: " + config.getString("GUI.FILL.item", "STONE") + " is not a valid material name for item FILL!");
+                PLUGIN.getLogger().severe("Error Message: " + e.getMessage());
+                return;
+            }
+        }
+        if (PLUGIN.isLegacy())
+            GUI.addFill(material, data);
+        else
+            GUI.addFill(material);
     }
 
     public static void open(Player player) {
