@@ -6,6 +6,7 @@ import com.i54m.betterchatcolors.commands.ChatColorCommand;
 import com.i54m.betterchatcolors.managers.PlayerDataManager;
 import com.i54m.betterchatcolors.managers.WorkerManager;
 import com.i54m.betterchatcolors.util.ChatColorGUI;
+import com.i54m.betterchatcolors.util.HexColorTranslator;
 import lombok.Getter;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -29,12 +30,15 @@ public final class BetterChatColors extends JavaPlugin {
 
     private final WorkerManager WORKER_MANAGER = WorkerManager.getINSTANCE();
     private final PlayerDataManager PLAYERDATA_MANAGER = PlayerDataManager.getINSTANCE();
+    private HexColorTranslator HEX_COLOR_TRANSLATOR;
     @Getter
     public final TreeMap<Long, String> boldCooldowns = new TreeMap<>();
     @Getter
     public final ArrayList<UUID> boldPlayers = new ArrayList<>();
     @Getter
     public boolean preHex;
+    @Getter
+    public boolean legacy = false;
 
     @Override
     public void onEnable() {
@@ -44,10 +48,11 @@ public final class BetterChatColors extends JavaPlugin {
                 getServer().getVersion().contains("1.10") ||
                 getServer().getVersion().contains("1.11") ||
                 getServer().getVersion().contains("1.12")) {
-            getLogger().severe("This plugin does not support pre 1.13 minecraft versions at the moment!");
+            getLogger().severe("Support for pre 1.13 minecraft versions is in beta at the moment!");
             getLogger().severe("Please consider updating to minecraft 1.13!");
-            getLogger().severe("This plugin may support 1.8+ in the future though!");
-            return;
+            legacy = true;
+            preHex = true;
+            getLogger().warning("This version of minecraft does not support hex color codes, this feature will be disabled!");
         } else if (getServer().getVersion().contains("1.13") ||
                 getServer().getVersion().contains("1.14") ||
                 getServer().getVersion().contains("1.15")) {
@@ -56,6 +61,7 @@ public final class BetterChatColors extends JavaPlugin {
         } else {
             preHex = false;
         }
+        HEX_COLOR_TRANSLATOR = HexColorTranslator.getINSTANCE();
         if (!(new File(getDataFolder(), "config.yml").exists()))
             saveDefaultConfig();
         if (getServer().getPluginManager().isPluginEnabled("MVdWPlaceholderAPI"))
@@ -69,6 +75,19 @@ public final class BetterChatColors extends JavaPlugin {
                                 return ChatColor.translateAlternateColorCodes('&', color) + ChatColor.BOLD + "";
                             } else
                                 return ChatColor.translateAlternateColorCodes('&', color);
+                        else if (color.startsWith("#")){
+                            if (boldPlayers.contains(event.getPlayer().getUniqueId())) {
+                                boldPlayers.remove(event.getPlayer().getUniqueId());
+                                return HEX_COLOR_TRANSLATOR.translate(color) == null ? ChatColor.WHITE + "" + ChatColor.BOLD : HEX_COLOR_TRANSLATOR.translate(color) + "" + ChatColor.BOLD;
+                            } else
+                                return HEX_COLOR_TRANSLATOR.translate(color) == null ? ChatColor.WHITE + "" : HEX_COLOR_TRANSLATOR.translate(color) + "";
+                        } else {
+                            if (boldPlayers.contains(event.getPlayer().getUniqueId())) {
+                                boldPlayers.remove(event.getPlayer().getUniqueId());
+                                return ChatColor.valueOf(color) + "" + ChatColor.BOLD + "";
+                            } else
+                                return ChatColor.valueOf(color) + "";
+                        }
                     }
                     return ChatColor.WHITE + "";
                 });
@@ -107,7 +126,6 @@ public final class BetterChatColors extends JavaPlugin {
         }
         ChatColorGUI.preLoadGUI();
         loadBoldCooldowns();
-
         getServer().getPluginCommand("chatcolor").setExecutor(new ChatColorCommand());
         getServer().getPluginCommand("bold").setExecutor(new BoldCommand());
 
