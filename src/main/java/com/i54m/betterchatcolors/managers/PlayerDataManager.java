@@ -7,6 +7,7 @@ import com.i54m.betterchatcolors.util.UUIDFetcher;
 import com.zaxxer.hikari.HikariDataSource;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import net.md_5.bungee.api.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -466,9 +467,25 @@ public class PlayerDataManager implements Listener, Manager {
     public String getPlayerData(@NotNull UUID uuid, boolean create) {
         if (PLUGIN.getConfig().getBoolean("MySQL.debugMode"))
             PLUGIN.getLogger().info("Getting playerdata for user: " + uuid + ". Creating new file? " + create);
+        String playerdata;
         if (isPlayerDataLoaded(uuid))
-            return playerDataCache.get(uuid);
-        else return loadPlayerData(uuid, create);
+            playerdata = playerDataCache.get(uuid);
+        else playerdata = loadPlayerData(uuid, create);
+        if (playerdata == null) {
+            PLUGIN.getLogger().severe("chatcolor data for user: " + uuid + " returned null value, returning color WHITE to prevent issues.");
+            return "WHITE";
+        } else if (!playerdata.startsWith("#")){
+            try {
+                if (PLUGIN.preHex)
+                    ChatColor.valueOf(playerdata);
+                else
+                    ChatColor.of(playerdata);
+            } catch (Exception e) {
+                PLUGIN.getLogger().severe("chatcolor data for user: " + uuid + " returned impossible value: " + playerdata + ", returning color WHITE to prevent issues.");
+                return "WHITE";
+            }
+        }
+        return playerdata;
     }
 
     public Long getBoldData(@NotNull Player player) {
@@ -498,7 +515,7 @@ public class PlayerDataManager implements Listener, Manager {
     }
 
     public boolean isPlayerDataLoaded(@NotNull UUID uuid) {
-        return playerDataCache.containsKey(uuid);
+        return playerDataCache.containsKey(uuid) && playerDataCache.get(uuid) != null;
     }
 
     public boolean isBoldDataLoaded(@NotNull UUID uuid) {
