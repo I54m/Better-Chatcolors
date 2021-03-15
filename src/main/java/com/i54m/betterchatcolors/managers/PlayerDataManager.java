@@ -491,7 +491,7 @@ public class PlayerDataManager implements Listener, Manager {
                 PLUGIN.getLogger().severe("chatcolor data for user: " + uuid + " returned impossible value: " + playerdata + ", returning color WHITE to prevent issues.");
                 return "WHITE";
             }
-            playerdata = ChatColor.getByChar(playerdata.charAt(1)).toString();
+            playerdata = ChatColor.getByChar(playerdata.charAt(1)).getName();
         }
         return playerdata;
     }

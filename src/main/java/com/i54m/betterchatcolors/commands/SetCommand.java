@@ -74,8 +74,8 @@ public class SetCommand implements SubCommand {
                 player.sendMessage(ChatColor.RED + "That is not a valid chat color code!");
                 return;
             }
-            PLAYER_DATA_MANAGER.setPlayerData(uuid, ChatColor.getByChar(args[1].charAt(1)).toString());
-            player.sendMessage(ChatColor.GREEN + "Successfully set " + args[0] + "'s chat color to: " + ChatColor.getByChar(args[1].charAt(1)) + ChatColor.getByChar(args[1].charAt(1)).toString());
+            PLAYER_DATA_MANAGER.setPlayerData(uuid, ChatColor.getByChar(args[1].charAt(1)).getName());
+            player.sendMessage(ChatColor.GREEN + "Successfully set " + args[0] + "'s chat color to: " + ChatColor.getByChar(args[1].charAt(1)) + ChatColor.getByChar(args[1].charAt(1)).getName());
         } else {
             if (PLUGIN.preHex)
                 player.sendMessage(ChatColor.RED + "Hex colors are currently not supported on this version!");

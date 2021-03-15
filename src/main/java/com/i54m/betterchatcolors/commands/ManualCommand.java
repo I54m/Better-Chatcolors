@@ -59,8 +59,8 @@ public class ManualCommand implements SubCommand {
                 player.sendMessage(ChatColor.RED + "That is not a valid chat color code!");
                 return;
             }
-            PLAYER_DATA_MANAGER.setPlayerData(player.getUniqueId(), ChatColor.getByChar(args[0].charAt(1)).toString());
-            player.sendMessage(ChatColor.GREEN + "Successfully set your chat color to: " + ChatColor.getByChar(args[0].charAt(1)) + ChatColor.getByChar(args[0].charAt(1)).toString());
+            PLAYER_DATA_MANAGER.setPlayerData(player.getUniqueId(), ChatColor.getByChar(args[0].charAt(1)).getName());
+            player.sendMessage(ChatColor.GREEN + "Successfully set your chat color to: " + ChatColor.getByChar(args[0].charAt(1)) + ChatColor.getByChar(args[0].charAt(1)).getName());
         } else
             player.sendMessage(ChatColor.RED + "Your chat color must start with either '#' for hex codes or '&' for color codes!");
     }
