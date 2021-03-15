@@ -36,13 +36,7 @@ public class PapiPlaceholderPreHex extends PlaceholderExpansion {
 
         if (identifier.equals("color")) {
             String color = PlayerDataManager.getINSTANCE().getPlayerData(player.getUniqueId(), true);
-            if (color.startsWith("&"))
-                if (plugin.getBoldPlayers().contains(player.getUniqueId())) {
-                    plugin.getBoldPlayers().remove(player.getUniqueId());
-                    return ChatColor.translateAlternateColorCodes('&', color) + ChatColor.BOLD + "";
-                } else
-                    return ChatColor.translateAlternateColorCodes('&', color);
-            else if (color.startsWith("#")){
+            if (color.startsWith("#")) {
                 if (plugin.getBoldPlayers().contains(player.getUniqueId())) {
                     plugin.getBoldPlayers().remove(player.getUniqueId());
                     return HEX_COLOR_TRANSLATOR.translate(color) == null ? ChatColor.WHITE + "" + ChatColor.BOLD : HEX_COLOR_TRANSLATOR.translate(color) + "" + ChatColor.BOLD;

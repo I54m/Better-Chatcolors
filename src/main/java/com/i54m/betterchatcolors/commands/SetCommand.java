@@ -58,9 +58,24 @@ public class SetCommand implements SubCommand {
                 PLAYER_DATA_MANAGER.setPlayerData(uuid, args[1]);
                 player.sendMessage(ChatColor.GREEN + "Successfully set " + args[0] + "'s chat color to: " + ChatColor.of(args[1]) + args[1]);
             }
-        } else if (args[1].startsWith("&")) {
-            PLAYER_DATA_MANAGER.setPlayerData(uuid, ChatColor.translateAlternateColorCodes('&', args[1]));
-            player.sendMessage(ChatColor.GREEN + "Successfully set" + args[0] + "'s chat color to: " + ChatColor.translateAlternateColorCodes('&', args[1]) + args[1]);
+        } else if (args[0].startsWith("&")) {
+            if ((args[0].contains("&k") ||
+                    args[0].contains("&n") ||
+                    args[0].contains("&l") ||
+                    args[0].contains("&o") ||
+                    args[0].contains("&m") ||
+                    args[0].contains("&r"))) {
+                player.sendMessage(ChatColor.RED + "You may not using formatting characters in your color code!");
+                return;
+            }
+            try {
+                ChatColor.getByChar(args[1].charAt(1));
+            } catch (Exception e) {
+                player.sendMessage(ChatColor.RED + "That is not a valid chat color code!");
+                return;
+            }
+            PLAYER_DATA_MANAGER.setPlayerData(uuid, ChatColor.getByChar(args[1].charAt(1)).toString());
+            player.sendMessage(ChatColor.GREEN + "Successfully set " + args[0] + "'s chat color to: " + ChatColor.getByChar(args[1].charAt(1)) + ChatColor.getByChar(args[1].charAt(1)).toString());
         } else {
             if (PLUGIN.preHex)
                 player.sendMessage(ChatColor.RED + "Hex colors are currently not supported on this version!");

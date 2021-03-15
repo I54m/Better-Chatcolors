@@ -69,13 +69,7 @@ public final class BetterChatColors extends JavaPlugin {
                 PlaceholderAPI.registerPlaceholder(this, "betterchatcolors_color", (event) -> {
                     if (event.isOnline() && event.getPlayer() != null) {
                         String color = PLAYERDATA_MANAGER.getPlayerData(event.getPlayer().getUniqueId(), true);
-                        if (color.startsWith("&"))
-                            if (boldPlayers.contains(event.getPlayer().getUniqueId())) {
-                                boldPlayers.remove(event.getPlayer().getUniqueId());
-                                return ChatColor.translateAlternateColorCodes('&', color) + ChatColor.BOLD + "";
-                            } else
-                                return ChatColor.translateAlternateColorCodes('&', color);
-                        else if (color.startsWith("#")){
+                        if (color.startsWith("#")) {
                             if (boldPlayers.contains(event.getPlayer().getUniqueId())) {
                                 boldPlayers.remove(event.getPlayer().getUniqueId());
                                 return HEX_COLOR_TRANSLATOR.translate(color) == null ? ChatColor.WHITE + "" + ChatColor.BOLD : HEX_COLOR_TRANSLATOR.translate(color) + "" + ChatColor.BOLD;
@@ -95,19 +89,11 @@ public final class BetterChatColors extends JavaPlugin {
                 PlaceholderAPI.registerPlaceholder(this, "betterchatcolors_color", (event) -> {
                     if (event.isOnline() && event.getPlayer() != null) {
                         String color = PLAYERDATA_MANAGER.getPlayerData(event.getPlayer().getUniqueId(), true);
-                        if (color.startsWith("&"))
-                            if (boldPlayers.contains(event.getPlayer().getUniqueId())) {
-                                boldPlayers.remove(event.getPlayer().getUniqueId());
-                                return ChatColor.translateAlternateColorCodes('&', color) + ChatColor.BOLD + "";
-                            } else
-                                return ChatColor.translateAlternateColorCodes('&', color);
-                        else {
-                            if (boldPlayers.contains(event.getPlayer().getUniqueId())) {
-                                boldPlayers.remove(event.getPlayer().getUniqueId());
-                                return ChatColor.of(color) + "" + ChatColor.BOLD + "";
-                            } else
-                                return ChatColor.of(color) + "";
-                        }
+                        if (boldPlayers.contains(event.getPlayer().getUniqueId())) {
+                            boldPlayers.remove(event.getPlayer().getUniqueId());
+                            return ChatColor.of(color) + "" + ChatColor.BOLD + "";
+                        } else
+                            return ChatColor.of(color) + "";
                     }
                     return ChatColor.WHITE + "";
                 });

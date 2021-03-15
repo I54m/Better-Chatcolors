@@ -8,6 +8,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class PapiPlaceholder extends PlaceholderExpansion {
     private BetterChatColors plugin;
+
     public PapiPlaceholder() {
         plugin = BetterChatColors.getInstance();
     }
@@ -33,19 +34,11 @@ public class PapiPlaceholder extends PlaceholderExpansion {
 
         if (identifier.equals("color")) {
             String color = PlayerDataManager.getINSTANCE().getPlayerData(player.getUniqueId(), true);
-            if (color.startsWith("&"))
-                if (plugin.getBoldPlayers().contains(player.getUniqueId())) {
-                    plugin.getBoldPlayers().remove(player.getUniqueId());
-                    return ChatColor.translateAlternateColorCodes('&', color) + ChatColor.BOLD + "";
-                } else
-                    return ChatColor.translateAlternateColorCodes('&', color);
-            else {
-                if (plugin.getBoldPlayers().contains(player.getUniqueId())) {
-                    plugin.getBoldPlayers().remove(player.getUniqueId());
-                    return ChatColor.of(color) + "" + ChatColor.BOLD + "";
-                } else
-                    return ChatColor.of(color) + "";
-            }
+            if (plugin.getBoldPlayers().contains(player.getUniqueId())) {
+                plugin.getBoldPlayers().remove(player.getUniqueId());
+                return ChatColor.of(color) + "" + ChatColor.BOLD + "";
+            } else
+                return ChatColor.of(color) + "";
         }
 
         return null;

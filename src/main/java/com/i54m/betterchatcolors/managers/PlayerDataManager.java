@@ -474,7 +474,7 @@ public class PlayerDataManager implements Listener, Manager {
         if (playerdata == null) {
             PLUGIN.getLogger().severe("chatcolor data for user: " + uuid + " returned null value, returning color WHITE to prevent issues.");
             return "WHITE";
-        } else if (!playerdata.startsWith("#")){
+        } else if (!playerdata.startsWith("#")) {
             try {
                 if (PLUGIN.preHex)
                     ChatColor.valueOf(playerdata);
@@ -484,6 +484,14 @@ public class PlayerDataManager implements Listener, Manager {
                 PLUGIN.getLogger().severe("chatcolor data for user: " + uuid + " returned impossible value: " + playerdata + ", returning color WHITE to prevent issues.");
                 return "WHITE";
             }
+        } else if (playerdata.startsWith("&")) {
+            try {
+                ChatColor.getByChar(playerdata.charAt(1));
+            } catch (Exception e) {
+                PLUGIN.getLogger().severe("chatcolor data for user: " + uuid + " returned impossible value: " + playerdata + ", returning color WHITE to prevent issues.");
+                return "WHITE";
+            }
+            playerdata = ChatColor.getByChar(playerdata.charAt(1)).toString();
         }
         return playerdata;
     }
