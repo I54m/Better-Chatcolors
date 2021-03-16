@@ -14,7 +14,7 @@ public class ViewCacheCommand implements SubCommand {
         player.sendMessage("Player data cache: ");
         for (UUID uuid : PLAYER_DATA_MANAGER.getPlayerDataCache().keySet()) {
             String playerdata = PLAYER_DATA_MANAGER.getPlayerDataCache().get(uuid);
-            player.sendMessage(uuid + ": " + playerdata);
+            player.sendMessage(uuid + ": " + playerdata + " is Valid chatcolor: " + PLAYER_DATA_MANAGER.isValidChatColor(playerdata));
         }
     }
 }
