@@ -5,6 +5,7 @@ import com.i54m.betterchatcolors.util.NameFetcher;
 import com.i54m.betterchatcolors.util.StorageType;
 import com.i54m.betterchatcolors.util.UUIDFetcher;
 import com.zaxxer.hikari.HikariDataSource;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import net.md_5.bungee.api.ChatColor;
@@ -23,10 +24,12 @@ import java.util.Map;
 import java.util.UUID;
 
 
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class PlayerDataManager implements Listener, Manager {
 
+    @Getter
     private final Map<UUID, String> playerDataCache = new HashMap<>();
+    @Getter
     private final Map<UUID, Long> boldDataCache = new HashMap<>();
     private final WorkerManager WORKER_MANAGER = WorkerManager.getINSTANCE();
     @Getter
@@ -259,7 +262,7 @@ public class PlayerDataManager implements Listener, Manager {
                 }
             }
             for (Player player : PLUGIN.getServer().getOnlinePlayers()) {
-                loadPlayerData(player.getUniqueId(), false);
+                loadPlayerData(player.getUniqueId(), true);
                 loadBoldData(player.getUniqueId());
             }
 
@@ -474,6 +477,15 @@ public class PlayerDataManager implements Listener, Manager {
         if (playerdata == null) {
             PLUGIN.getLogger().severe("chatcolor data for user: " + uuid + " returned null value, returning color WHITE to prevent issues.");
             return "WHITE";
+        } else if (playerdata.startsWith("&") || playerdata.startsWith(String.valueOf(ChatColor.COLOR_CHAR))) {
+            try {
+                ChatColor.getByChar(playerdata.charAt(1));
+            } catch (Exception e) {
+                e.printStackTrace();
+                PLUGIN.getLogger().severe("chatcolor data for user: " + uuid + " returned impossible value: '" + playerdata + "', returning color WHITE to prevent issues.");
+                return "WHITE";
+            }
+            playerdata = ChatColor.getByChar(playerdata.charAt(1)).getName().toUpperCase();
         } else if (!playerdata.startsWith("#")) {
             try {
                 if (PLUGIN.preHex)
@@ -481,17 +493,10 @@ public class PlayerDataManager implements Listener, Manager {
                 else
                     ChatColor.of(playerdata);
             } catch (Exception e) {
-                PLUGIN.getLogger().severe("chatcolor data for user: " + uuid + " returned impossible value: " + playerdata + ", returning color WHITE to prevent issues.");
+                e.printStackTrace();
+                PLUGIN.getLogger().severe("chatcolor data for user: " + uuid + " returned impossible value: '" + playerdata + "', returning color WHITE to prevent issues.");
                 return "WHITE";
             }
-        } else if (playerdata.startsWith("&")) {
-            try {
-                ChatColor.getByChar(playerdata.charAt(1));
-            } catch (Exception e) {
-                PLUGIN.getLogger().severe("chatcolor data for user: " + uuid + " returned impossible value: " + playerdata + ", returning color WHITE to prevent issues.");
-                return "WHITE";
-            }
-            playerdata = ChatColor.getByChar(playerdata.charAt(1)).getName();
         }
         return playerdata;
     }
@@ -530,4 +535,25 @@ public class PlayerDataManager implements Listener, Manager {
         return boldDataCache.containsKey(uuid);
     }
 
+    public boolean isValidChatColor(String color) {
+        if (color == null) {
+            return false;
+        } else if (color.startsWith("&")) {
+            try {
+                ChatColor.getByChar(color.charAt(1));
+            } catch (Exception e) {
+                return false;
+            }
+        } else if (!color.startsWith("#")) {
+            try {
+                if (PLUGIN.preHex)
+                    ChatColor.valueOf(color);
+                else
+                    ChatColor.of(color);
+            } catch (Exception e) {
+                return false;
+            }
+        }
+        return true;
+    }
 }
