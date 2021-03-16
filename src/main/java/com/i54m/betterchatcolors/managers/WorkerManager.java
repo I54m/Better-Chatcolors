@@ -1,9 +1,12 @@
 package com.i54m.betterchatcolors.managers;
 
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class WorkerManager implements Manager {
 
     @Getter
@@ -11,9 +14,6 @@ public class WorkerManager implements Manager {
     private final ArrayList<Worker> workers = new ArrayList<>();
     private boolean locked = true;
     private Thread mainThread;
-
-    private WorkerManager() {
-    }
 
     @Override
     public synchronized void start() {
