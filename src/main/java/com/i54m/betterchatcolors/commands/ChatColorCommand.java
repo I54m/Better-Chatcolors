@@ -64,6 +64,11 @@ public class ChatColorCommand implements CommandExecutor {
                     new ReloadCommand().execute(player, (String[]) ArrayUtils.remove(args, 0));
                     return true;
                 }
+                case "viewcache": {
+                    if (!player.hasPermission("betterchatcolors.dev")) return true;
+                    new ViewCacheCommand().execute(player, (String[]) ArrayUtils.remove(args, 0));
+                    return true;
+                }
             }
         }
     }
