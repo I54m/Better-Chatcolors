@@ -58,13 +58,13 @@ public class SetCommand implements SubCommand {
                 PLAYER_DATA_MANAGER.setPlayerData(uuid, args[1]);
                 player.sendMessage(ChatColor.GREEN + "Successfully set " + args[0] + "'s chat color to: " + ChatColor.of(args[1]) + args[1]);
             }
-        } else if (args[0].startsWith("&")) {
-            if ((args[0].contains("&k") ||
-                    args[0].contains("&n") ||
-                    args[0].contains("&l") ||
-                    args[0].contains("&o") ||
-                    args[0].contains("&m") ||
-                    args[0].contains("&r"))) {
+        } else if (args[1].startsWith("&")) {
+            if ((args[1].contains("&k") ||
+                    args[1].contains("&n") ||
+                    args[1].contains("&l") ||
+                    args[1].contains("&o") ||
+                    args[1].contains("&m") ||
+                    args[1].contains("&r"))) {
                 player.sendMessage(ChatColor.RED + "You may not using formatting characters in your color code!");
                 return;
             }
