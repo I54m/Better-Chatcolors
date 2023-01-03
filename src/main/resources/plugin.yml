@@ -7,7 +7,7 @@ description: An Advanced Chatcolor plugin
 website: https://i54m.com
 softdepend:
   - PlaceholderAPI
-#  - MVdWPlaceholderAPI
+  - MVdWPlaceholderAPI
 
 commands:
   chatcolor:
