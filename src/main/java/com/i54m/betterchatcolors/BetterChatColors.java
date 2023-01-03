@@ -1,6 +1,5 @@
 package com.i54m.betterchatcolors;
 
-import be.maximvdw.placeholderapi.PlaceholderAPI;
 import com.i54m.betterchatcolors.commands.BoldCommand;
 import com.i54m.betterchatcolors.commands.ChatColorCommand;
 import com.i54m.betterchatcolors.managers.PlayerDataManager;
@@ -8,7 +7,6 @@ import com.i54m.betterchatcolors.managers.WorkerManager;
 import com.i54m.betterchatcolors.util.ChatColorGUI;
 import com.i54m.betterchatcolors.util.HexColorTranslator;
 import lombok.Getter;
-import net.md_5.bungee.api.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
@@ -64,39 +62,39 @@ public final class BetterChatColors extends JavaPlugin {
         HEX_COLOR_TRANSLATOR = HexColorTranslator.getINSTANCE();
         if (!(new File(getDataFolder(), "config.yml").exists()))
             saveDefaultConfig();
-        if (getServer().getPluginManager().isPluginEnabled("MVdWPlaceholderAPI"))
-            if (preHex)
-                PlaceholderAPI.registerPlaceholder(this, "betterchatcolors_color", (event) -> {
-                    if (event.isOnline() && event.getPlayer() != null) {
-                        String color = PLAYERDATA_MANAGER.getPlayerData(event.getPlayer().getUniqueId(), true);
-                        if (color.startsWith("#")) {
-                            if (boldPlayers.contains(event.getPlayer().getUniqueId())) {
-                                boldPlayers.remove(event.getPlayer().getUniqueId());
-                                return HEX_COLOR_TRANSLATOR.translate(color) == null ? ChatColor.WHITE + "" + ChatColor.BOLD : HEX_COLOR_TRANSLATOR.translate(color) + "" + ChatColor.BOLD;
-                            } else
-                                return HEX_COLOR_TRANSLATOR.translate(color) == null ? ChatColor.WHITE + "" : HEX_COLOR_TRANSLATOR.translate(color) + "";
-                        } else {
-                            if (boldPlayers.contains(event.getPlayer().getUniqueId())) {
-                                boldPlayers.remove(event.getPlayer().getUniqueId());
-                                return ChatColor.valueOf(color) + "" + ChatColor.BOLD + "";
-                            } else
-                                return ChatColor.valueOf(color) + "";
-                        }
-                    }
-                    return ChatColor.WHITE + "";
-                });
-            else
-                PlaceholderAPI.registerPlaceholder(this, "betterchatcolors_color", (event) -> {
-                    if (event.isOnline() && event.getPlayer() != null) {
-                        String color = PLAYERDATA_MANAGER.getPlayerData(event.getPlayer().getUniqueId(), true);
-                        if (boldPlayers.contains(event.getPlayer().getUniqueId())) {
-                            boldPlayers.remove(event.getPlayer().getUniqueId());
-                            return ChatColor.of(color) + "" + ChatColor.BOLD + "";
-                        } else
-                            return ChatColor.of(color) + "";
-                    }
-                    return ChatColor.WHITE + "";
-                });
+//        if (getServer().getPluginManager().isPluginEnabled("MVdWPlaceholderAPI"))
+//            if (preHex)
+//                PlaceholderAPI.registerPlaceholder(this, "betterchatcolors_color", (event) -> {
+//                    if (event.isOnline() && event.getPlayer() != null) {
+//                        String color = PLAYERDATA_MANAGER.getPlayerData(event.getPlayer().getUniqueId(), true);
+//                        if (color.startsWith("#")) {
+//                            if (boldPlayers.contains(event.getPlayer().getUniqueId())) {
+//                                boldPlayers.remove(event.getPlayer().getUniqueId());
+//                                return HEX_COLOR_TRANSLATOR.translate(color) == null ? ChatColor.WHITE + "" + ChatColor.BOLD : HEX_COLOR_TRANSLATOR.translate(color) + "" + ChatColor.BOLD;
+//                            } else
+//                                return HEX_COLOR_TRANSLATOR.translate(color) == null ? ChatColor.WHITE + "" : HEX_COLOR_TRANSLATOR.translate(color) + "";
+//                        } else {
+//                            if (boldPlayers.contains(event.getPlayer().getUniqueId())) {
+//                                boldPlayers.remove(event.getPlayer().getUniqueId());
+//                                return ChatColor.valueOf(color) + "" + ChatColor.BOLD + "";
+//                            } else
+//                                return ChatColor.valueOf(color) + "";
+//                        }
+//                    }
+//                    return ChatColor.WHITE + "";
+//                });
+//            else
+//                PlaceholderAPI.registerPlaceholder(this, "betterchatcolors_color", (event) -> {
+//                    if (event.isOnline() && event.getPlayer() != null) {
+//                        String color = PLAYERDATA_MANAGER.getPlayerData(event.getPlayer().getUniqueId(), true);
+//                        if (boldPlayers.contains(event.getPlayer().getUniqueId())) {
+//                            boldPlayers.remove(event.getPlayer().getUniqueId());
+//                            return ChatColor.of(color) + "" + ChatColor.BOLD + "";
+//                        } else
+//                            return ChatColor.of(color) + "";
+//                    }
+//                    return ChatColor.WHITE + "";
+//                });
         if (getServer().getPluginManager().isPluginEnabled("PlaceholderAPI"))
             if (preHex)
                 new PapiPlaceholderPreHex().register();

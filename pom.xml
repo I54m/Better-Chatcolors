@@ -31,11 +31,11 @@
             <id>sonatype</id>
             <url>https://oss.sonatype.org/content/groups/public/</url>
         </repository>
-        <repository>
-            <id>mvdw-software</id>
-            <name>MVdW Public Repositories</name>
-            <url>http://repo.mvdw-software.be/content/groups/public/</url>
-        </repository>
+<!--        <repository>-->
+<!--            <id>mvdw-software</id>-->
+<!--            <name>MVdW Public Repositories</name>-->
+<!--            <url>https://repo.mvdw-software.be/content/groups/public/</url>-->
+<!--        </repository>-->
     </repositories>
 
     <dependencies>
@@ -75,22 +75,22 @@
             <version>16.0.3</version>
             <scope>compile</scope>
         </dependency>
-        <dependency>
-            <groupId>be.maximvdw</groupId>
-            <artifactId>MVdWPlaceholderAPI</artifactId>
-            <version>3.1.1-SNAPSHOT</version>
-            <scope>provided</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.eclipse.paho</groupId>
-                    <artifactId>org.eclipse.paho.client.mqttv3</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.spigotmc</groupId>
-                    <artifactId>spigot</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>be.maximvdw</groupId>-->
+<!--            <artifactId>MVdWPlaceholderAPI</artifactId>-->
+<!--            <version>3.1.1-SNAPSHOT</version>-->
+<!--            <scope>provided</scope>-->
+<!--            <exclusions>-->
+<!--                <exclusion>-->
+<!--                    <groupId>org.eclipse.paho</groupId>-->
+<!--                    <artifactId>org.eclipse.paho.client.mqttv3</artifactId>-->
+<!--                </exclusion>-->
+<!--                <exclusion>-->
+<!--                    <groupId>org.spigotmc</groupId>-->
+<!--                    <artifactId>spigot</artifactId>-->
+<!--                </exclusion>-->
+<!--            </exclusions>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>me.clip</groupId>
             <artifactId>placeholderapi</artifactId>
